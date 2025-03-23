@@ -1,1 +1,3 @@
-ahhh
+# Hercules CLI
+
+nothing to see here...
