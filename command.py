@@ -1,7 +1,7 @@
 import shlex
-from directory import Directory
-from file import File
-from user import User
+from cli_objects.directory import Directory
+from cli_objects.file import File
+from cli_objects.user import User
 
 def cd(user, args):
     print('cd:', user.get_working_dir().name)
@@ -25,11 +25,11 @@ def cd(user, args):
             return
     print('to:', user.get_working_dir().name)
     user.append_history(("The system cannot find the path specified.\n\n", "white"))
-    
 
 
 def clear(user, args):
     return ""
+
 
 def ls(user, args):
     file_cat = []
@@ -54,8 +54,8 @@ hercules_commands = {
     "help": help
 }
 
-def execute_command(command, user):
 
+def execute_command(command, user):
     user.extend_history(user.get_terminal_string(command))
     user.append_history(("\n", "white"))
 

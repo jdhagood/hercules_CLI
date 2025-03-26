@@ -4,7 +4,7 @@ def login_screen(stdscr):
     password = "hercules"
     user_guess = "bro"
 
-    header = """\                                            
+    header = """                                         
     ██╗      ██████╗  ██████╗ ██╗███╗   ██╗
     ██║     ██╔═══██╗██╔════╝ ██║████╗  ██║
     ██║     ██║   ██║██║  ███╗██║██╔██╗ ██║
