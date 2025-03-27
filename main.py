@@ -1,13 +1,15 @@
 # main.py
 import curses
-from login import login_screen
 from cli_objects.directory import Directory
 from cli_objects.file import File
 from cli_objects.user import User
-from command import execute_command
-from display import display_terminal
+from display import init_terminal, display_terminal
 
 from command_manager import CommandManager
+
+from terminal import Terminal
+
+terminal = Terminal()
 
 def main(stdscr):
     # USER SETUP
@@ -20,34 +22,15 @@ def main(stdscr):
     root.add_content(Directory("C"))
     user = User("Hercules", root)
 
+    init_terminal(stdscr)
     command_manager = CommandManager()
-
-    # COLOR SETUP
-    curses.start_color()
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_BLACK)
-    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-    curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLACK)
-
-    color_dict = {
-        "red": 1,
-        "green": 2,
-        "blue": 3,
-        "yellow": 4,
-        "white": 5
-    }
-
-    curses.curs_set(1)
-    stdscr.clear()
     
     command = ""
 
     while True:
-        display_terminal(user, command, color_dict, stdscr)
+        display_terminal(user, command, stdscr)
 
         key = stdscr.getch()
-        
         if key == 10:  # Enter key
             if command.strip():
                 command_manager.execute(command, user)
@@ -64,4 +47,4 @@ def main(stdscr):
             command += chr(key)
 
 if __name__ == "__main__":
-    curses.wrapper(main)
+    curses.wrapper(terminal.run)

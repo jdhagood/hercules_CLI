@@ -28,12 +28,11 @@ class CommandManager:
 
 
     def execute(self, command, user):
-
         user.extend_history(user.get_terminal_string(command))
         user.append_history(("\n", "white"))
 
         split_command = shlex.split(command)
-        command_name = split_command[0]
+        command_name = split_command[0].lower()
 
         if command_name in self.commands:
             self.commands[command_name].execute(user, split_command[1::])

@@ -1,8 +1,15 @@
+from password import Password
+
 class File:
-    def __init__(self, name, extension, content = ""):
+    def __init__(self, name, extension, content = "", password = ""):
         self.name = name
         self.extension = extension
         self.content = content
+        if password:
+            self.password = Password(password)
+            self.has_password = True
+        else:
+            self.has_password = False
 
     def get_name(self):
         return self.name
@@ -19,3 +26,9 @@ class File:
     
     def set_content(self, new_content):
         self.content = new_content
+
+    def is_protected(self):
+        return self.has_password
+    
+    def ask_password(self, user, stdscr):
+        return self.password.enter_password(user, stdscr)

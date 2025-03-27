@@ -44,5 +44,8 @@ class User:
     def extend_history(self, new_history):
         self.history.extend(new_history)
     
+    def set_history(self, new_history):
+        self.history = new_history
+
     def get_terminal_string(self, command):
         return [(self.get_path_str(), "green"), (":~ $ ", "blue"), (command, "white")]

@@ -1,6 +1,27 @@
 import curses
 
-def print_colored_text(stdscr, text_tuples, color_dict):
+def init_terminal(stdscr):
+    # COLOR SETUP
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
+    global color_dict
+    color_dict = {
+        "red": 1,
+        "green": 2,
+        "blue": 3,
+        "yellow": 4,
+        "white": 5
+    }
+
+    curses.curs_set(1)
+    stdscr.clear()
+
+def print_colored_text(stdscr, text_tuples):
     def wrap_tuples(text_tuples, max_width, max_height):
         text_rows = []
         current_row = []
@@ -66,7 +87,7 @@ def print_colored_text(stdscr, text_tuples, color_dict):
 
     stdscr.refresh()
 
-def display_terminal(user, command, color_dict, stdscr):
+def display_terminal(user, command, stdscr):
     text_tuples = user.get_history()[::]
     text_tuples.extend(user.get_terminal_string(command))
-    print_colored_text(stdscr, text_tuples, color_dict)
+    print_colored_text(stdscr, text_tuples)
