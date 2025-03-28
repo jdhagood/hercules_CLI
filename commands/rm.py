@@ -1,5 +1,7 @@
 from commands.command import Command
 
-class Clear(Command):
+class Rm(Command):
     def execute(self, terminal, args):
-        terminal.set_history([])
+        if not args:
+            return
+        pass

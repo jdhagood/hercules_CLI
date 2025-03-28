@@ -1,26 +1,39 @@
-from display import print_colored_text
 import curses
+import time
 
 class Password:
-    def __init__(self, password):
+    def __init__(self, password, lockout_time = 0):
         self.password = password
+        if lockout_time:
+            self.lockout_time = lockout_time
+            self.has_lockout = True
+            self.last_incorrect_guess_time = -float("inf")
+        else:
+            self.has_lockout = False
     
     def get_password(self):
         return self.password
     
     def set_password(self, password):
         self.password = password
+
+    def is_lockedout(self):
+        return time.time() < self.last_incorrect_guess_time + self.lockout_time
     
-    def enter_password(self, user, stdscr):
-        display_text = user.get_history()[::]
+    def lockout_time_remaining(self):
+        return int(max(0, self.last_incorrect_guess_time + self.lockout_time  - time.time()))
+
+    def enter_password(self, terminal):
+        display_text = terminal.get_history()[::]
         display_text.append(("This File or Directory is password protected\n\n", "red"))
+
         display_text.append(("Enter Password: ", "white"))
         
         entered_password = ""
         while True:
             display_text[-1] = ("Enter Password: " + entered_password, "white")
-            print_colored_text(stdscr, display_text)
-            key = stdscr.getch()
+            terminal.print_colored_text(display_text)
+            key = terminal.stdscr.getch()
             if key == 10:  # Enter key
                 break
             elif key in (curses.KEY_BACKSPACE, 8):
@@ -29,6 +42,9 @@ class Password:
                 entered_password += chr(key)
         
         display_text[-1] = ("Enter Password: " + entered_password + "\n\n", "white")
-        user.set_History = display_text
-        return entered_password == self.password
-
+        terminal.set_history(display_text)
+        if entered_password == self.password:
+            return True
+        else:
+            self.last_incorrect_guess_time = time.time()
+            return False

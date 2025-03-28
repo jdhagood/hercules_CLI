@@ -1,5 +1,5 @@
 from commands.command import Command
 
 class Quit(Command):
-    def execute(self, user, args):
+    def execute(self, terminal, args):
         quit()

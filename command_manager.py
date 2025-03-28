@@ -22,19 +22,18 @@ class CommandManager:
                 for attribute_name in dir(module):
                     attribute = getattr(module, attribute_name)
                     if isinstance(attribute, type) and issubclass(attribute, Command):
-                        print(attribute_name)
                         command_instance = attribute(attribute_name)
                         self.commands[attribute_name.lower()] = command_instance  # Register the command
 
 
-    def execute(self, command, user):
-        user.extend_history(user.get_terminal_string(command))
-        user.append_history(("\n", "white"))
+    def execute(self, command, terminal):
+        terminal.extend_history(terminal.user.get_terminal_string(command))
+        terminal.append_history(("\n", "white"))
 
         split_command = shlex.split(command)
         command_name = split_command[0].lower()
 
         if command_name in self.commands:
-            self.commands[command_name].execute(user, split_command[1::])
+            self.commands[command_name].execute(terminal, split_command[1::])
         else:
-            user.append_history((f"Command '{command_name}' not recognized.\n\n", "red"))
+            terminal.append_history((f"Command '{command_name}' not recognized.\n\n", "red"))
